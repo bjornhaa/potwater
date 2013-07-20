@@ -4,10 +4,6 @@ import com.pi4j.device.piface.PiFace;
 import com.pi4j.device.piface.impl.PiFaceDevice;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.wiringpi.Spi;
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,9 +33,10 @@ class PiFaceCommand extends Command {
         pumpPin.high();
     }
 
-    public void disable() {
-        System.out.println("\tStopping pump and valve " + valve+". Has been running for "+formatDuration());
+    public void disable() throws Exception {
+        System.out.println("\tStopping pump and valve " + valve + ". Has been running for " + formatDuration());
         pumpPin.low();
+        Thread.sleep(2000);
         valvePin.low();
     }
 

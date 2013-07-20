@@ -33,7 +33,7 @@
 
 
     <build>
-        <finalName>potwater-python</finalName>
+        <finalName>potwater</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -59,7 +59,6 @@
                     <mainClass>com.haakenstad.potwater.scheduler.PotwaterScheduler</mainClass>
                     <arguments>
                         <argument>foo</argument>
-                        <argument>bar</argument>
                     </arguments>
                 </configuration>
             </plugin>

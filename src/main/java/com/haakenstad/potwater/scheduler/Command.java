@@ -35,6 +35,6 @@ public abstract class Command {
 
     public abstract void enable();
 
-    public abstract void disable();
+    public abstract void disable() throws Exception;
 
 }
