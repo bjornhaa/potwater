@@ -1,0 +1,8 @@
+Active mq: /usr/local/Cellar/activemq/5.8.0/
+
+Stomper:
+- sudo yum install python-twisted
+- last ned https://github.com/oisinmulvihill/stomper/blob/master/setup.py
+
+sudo apt-get install vsftpd
+sudo service vsftpd restart
