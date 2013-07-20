@@ -1,12 +1,5 @@
 package com.haakenstad.potwater.scheduler;
 
-import com.pi4j.component.switches.SwitchListener;
-import com.pi4j.component.switches.SwitchState;
-import com.pi4j.component.switches.SwitchStateChangeEvent;
-import com.pi4j.device.piface.PiFace;
-import com.pi4j.device.piface.PiFaceSwitch;
-import com.pi4j.device.piface.impl.PiFaceDevice;
-import com.pi4j.wiringpi.Spi;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
@@ -27,8 +20,24 @@ import static org.quartz.TriggerBuilder.newTrigger;
  */
 public class PotwaterScheduler {
 
+    private static final Integer VALVE_1 = 7;
+    private static final Integer VALVE_2 = 6;
+    private static final Integer VALVE_3 = 5;
+    private static final Integer VALVE_4 = 4;
+
+    private static final Integer DURATION_VALVE_1 = 15;
+    private static final Integer DURATION_VALVE_2 = 15;
+    private static final Integer DURATION_VALVE_3 = 15;
+    private static final Integer DURATION_VALVE_4 = 25;
+
+    private static final Integer PUMP = 2;
+
     public static void main(String[] args) throws Exception {
         System.out.println("*********** Starting PotWater ****************");
+        boolean debug = false;
+        if (args.length > 0) {
+            debug = true;
+        }
 
 
         Logger log = LoggerFactory.getLogger(PotwaterScheduler.class);
@@ -38,6 +47,12 @@ public class PotwaterScheduler {
 
         JobDetail job = newJob(PotWaterJob.class)
                 .withIdentity("wetjob")
+                .usingJobData("debug",debug)
+                .usingJobData("pump",PUMP)
+                .usingJobData(VALVE_1.toString(),DURATION_VALVE_1)
+                .usingJobData(VALVE_2.toString(),DURATION_VALVE_2)
+                .usingJobData(VALVE_3.toString(),DURATION_VALVE_3)
+                .usingJobData(VALVE_4.toString(),DURATION_VALVE_4)
                 .build();
 
         CronTrigger trigger = newTrigger()
@@ -48,8 +63,8 @@ public class PotwaterScheduler {
                 .startNow()
                 .build();
         Date ft = null;
-        ft = sched.scheduleJob(job, trigger);
-        //ft = sched.scheduleJob(job, testTrigger);
+        //ft = sched.scheduleJob(job, trigger);
+        ft = sched.scheduleJob(job, testTrigger);
         log.info(job.getKey() + " has been scheduled to run at: " + ft
                 + " and repeat based on expression: "
                 + trigger.getCronExpression());
@@ -57,7 +72,6 @@ public class PotwaterScheduler {
         sched.start();
 
         log.info("------- Started Scheduler -----------------");
-
 
 
         while (true) ;

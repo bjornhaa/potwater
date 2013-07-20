@@ -1,15 +1,12 @@
 package com.haakenstad.potwater.scheduler;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import org.quartz.*;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,12 +15,10 @@ import java.util.Properties;
  * Time: 01:06
  * To change this template use File | Settings | File Templates.
  */
+@DisallowConcurrentExecution
 public class PotWaterJob implements Job {
 
     private static final int SECOND = 1000;
-    private static final int WATER_LENGTH = 25 * SECOND;
-    private static final int LONG_WATER_LENGTH = 20 * SECOND;
-    private boolean debugMode = false;
 
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
@@ -35,49 +30,52 @@ public class PotWaterJob implements Job {
     }
 
     private void dojob(JobExecutionContext jobExecutionContext) throws Exception {
-        //sendAlert("potwater started");
+        JobDataMap jobDataMap = jobExecutionContext.getJobDetail().getJobDataMap();
+        Map<Integer, Integer> valves = new HashMap<Integer, Integer>();
+        for (String key : jobDataMap.keySet()) {
+            if (StringUtils.isNumeric(key)) {
+                valves.put(Integer.parseInt(key), jobDataMap.getInt(key));
+            }
+        }
+        boolean debug = jobDataMap.getBoolean("debug");
+        int pump = jobDataMap.getInt("pump");
+        System.out.println("pump = " + pump);
+        System.out.println("valves = " + valves);
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss");
         String time = dateTimeFormatter.print(System.currentTimeMillis());
         System.out.println("Starting water sequence at " + time);
         Command command;
-        if (debugMode) {
-            command = new DebugCommand();
-        } else {
-            command = new PiFaceCommand();
+        for (Integer valve : valves.keySet()) {
+            Integer duration = valves.get(valve);
+            if (debug) {
+                command = new DebugCommand(valve, pump);
+            } else {
+                command = new PiFaceCommand(valve, pump);
+            }
+            command.enable();
+            Thread.sleep(duration * SECOND);
+            command.disable();
+            Thread.sleep(SECOND);
         }
-
-        command.enableLongRun();
-        command.enablePump();
-        Thread.sleep(LONG_WATER_LENGTH);
-        command.disableLongRun();
-        command.enable();
-        Thread.sleep(WATER_LENGTH);
-        command.disable();
         System.out.println("Water sequence done\n");
 
     }
 
 
-    private class DebugCommand implements Command {
+    private class DebugCommand extends Command {
+
+
+        public DebugCommand(Integer valve, Integer pump) throws Exception {
+            super(valve, pump);
+        }
 
         public void enable() {
-            System.out.println("\tenable valves");
+            System.out.println("\tDebug enable " + valve);
         }
 
         public void disable() {
-            System.out.println("\tdisable all");
+            System.out.println("\tDebug Stopping pump and valve " + valve + ". Has been running for " + formatDuration());
         }
 
-        public void enableLongRun() {
-            System.out.println("Enable long run");
-        }
-
-        public void enablePump() {
-            System.out.println("Enable pump");
-        }
-
-        public void disableLongRun() {
-            System.out.println("Disable long run");
-        }
     }
 }
