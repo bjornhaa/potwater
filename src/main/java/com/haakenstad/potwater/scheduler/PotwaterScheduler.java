@@ -67,8 +67,8 @@ public class PotwaterScheduler {
                 .startNow()
                 .build();
         Date ft = null;
-        //ft = sched.scheduleJob(job, trigger);
-        ft = sched.scheduleJob(job, testTrigger);
+        ft = sched.scheduleJob(job, trigger);
+        //ft = sched.scheduleJob(job, testTrigger);
         log.info(job.getKey() + " has been scheduled to run at: " + ft
                 + " and repeat based on expression: "
                 + trigger.getCronExpression());
