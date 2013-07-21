@@ -29,15 +29,13 @@ class PiFaceCommand extends Command {
 
     public void enable() {
         System.out.println("\tStarting pump and valve " + valve);
-        pifaceDevice.getOutputPin(3).high();
         valvePin.high();
-        //pumpPin.high();
+        pumpPin.high();
     }
 
     public void disable() throws Exception {
         System.out.println("\tStopping pump and valve " + valve + ". Has been running for " + formatDuration());
-        //pumpPin.low();
-        pifaceDevice.getOutputPin(3).low();
+        pumpPin.low();
         valvePin.low();
     }
 
