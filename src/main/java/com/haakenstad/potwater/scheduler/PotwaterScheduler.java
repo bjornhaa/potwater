@@ -21,14 +21,14 @@ import static org.quartz.TriggerBuilder.newTrigger;
  */
 public class PotwaterScheduler {
 
-    private static final Integer VALVE_1 = 7;
-    private static final Integer VALVE_2 = 6;
-    private static final Integer VALVE_3 = 5;
-    private static final Integer VALVE_4 = 4;
+    private static final Integer VALVE_1 = 2;
+    private static final Integer VALVE_2 = 3;
+    private static final Integer VALVE_3 = 4;
+    private static final Integer VALVE_4 = 5;
 
-    private static final Integer DURATION_VALVE_1 = 10;
+    private static final Integer DURATION_VALVE_1 = 15;
     private static final Integer DURATION_VALVE_2 = 10;
-    private static final Integer DURATION_VALVE_3 = 10;
+    private static final Integer DURATION_VALVE_3 = 15;
     private static final Integer DURATION_VALVE_4 = 25;
 
     private static final Integer PUMP = 2;
