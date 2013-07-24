@@ -61,7 +61,7 @@ public class PotwaterScheduler {
 
         CronTrigger trigger = newTrigger()
                 .withIdentity("trigger1")
-                .withSchedule(cronSchedule("0 0 20 * * ?"))
+                .withSchedule(cronSchedule("0 15 20 * * ?"))
                 .build();
         Trigger testTrigger = newTrigger()
                 .startNow()
