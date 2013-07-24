@@ -26,9 +26,9 @@ public class PotwaterScheduler {
     private static final Integer VALVE_3 = 4;
     private static final Integer VALVE_4 = 5;
 
-    private static final Integer DURATION_VALVE_1 = 15;
+    private static final Integer DURATION_VALVE_1 = 5;
     private static final Integer DURATION_VALVE_2 = 10;
-    private static final Integer DURATION_VALVE_3 = 15;
+    private static final Integer DURATION_VALVE_3 = 5;
     private static final Integer DURATION_VALVE_4 = 25;
 
     private static final Integer PUMP = 7;
@@ -61,7 +61,7 @@ public class PotwaterScheduler {
 
         CronTrigger trigger = newTrigger()
                 .withIdentity("trigger1")
-                .withSchedule(cronSchedule("0 15 20 * * ?"))
+                .withSchedule(cronSchedule("0 0 20 * * ?"))
                 .build();
         Trigger testTrigger = newTrigger()
                 .startNow()
