@@ -31,7 +31,7 @@ public class PotwaterScheduler {
     private static final Integer DURATION_VALVE_3 = 15;
     private static final Integer DURATION_VALVE_4 = 25;
 
-    private static final Integer PUMP = 2;
+    private static final Integer PUMP = 7;
 
     public static void main(String[] args) throws Exception {
         System.out.println("*********** Starting PotWater ****************");
